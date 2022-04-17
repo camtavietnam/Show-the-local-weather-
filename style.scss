@@ -1,0 +1,260 @@
+// font sizes
+$font-size-summary: 1.25em;
+$font-size-temp: 3.8em;
+$font-size-general: 1em;
+$font-size-small: 0.8em;
+
+// font weights
+$font-weight-summary: 700;
+$font-weight-general: 400;
+$font-weight-temp: 900;
+
+// colors
+$next-color-primary: #6C7C8A;
+$next-color-maxtemp: #ED6A5A;
+$next-color-mintemp: #5CA4A9;
+$switch-color: #FF6B35;
+$link-color: #6A687A;
+
+// other styles
+$wrapper-radius: 10px;
+
+// mixins
+@mixin current-textstyle {
+    p {
+        color: #FFF;
+        margin: 0;
+    }
+}
+
+@mixin link-style($color: $link-color) {
+    color: $color;
+    text-decoration: none;
+}
+
+@mixin flex-basis($basis) {
+    flex: $basis;
+}
+
+@mixin small-screen() {
+    @media only screen and (max-width: 479px) {
+        @content;
+    }
+}
+
+@mixin medium-screen() {
+    @media only screen and (max-width: 768px) and (min-width: 480px) {
+        @content;
+    }
+}
+
+/* ---------------------------------
+Base Styles
+--------------------------------- */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Lato', sans-serif;
+    background: #DDE8ED;
+}
+
+ul,
+li {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+.container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.wrapper {
+    width: 370px;
+    margin: 1.25em;
+    border-radius: $wrapper-radius;
+    box-shadow: 0 3px 10px #CAD5DA;
+    overflow: hidden;
+
+    @include small-screen {
+        width: 90%;
+    }
+
+    @include medium-screen {
+        width: 70%;
+    }
+}
+
+/* ---------------------------------
+Current Temprature
+--------------------------------- */
+.current {
+    position: relative;
+    height: 340px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-top-left-radius: $wrapper-radius;
+    border-top-right-radius: $wrapper-radius;
+}
+
+.current input[type='checkbox'] {
+    // Hide checkbox
+    -moz-appearance: none;
+    -ms-progress-appearance: none;
+    -webkit-appearance: none;
+    outline: none;
+    cursor: pointer;
+    position: relative;
+    display: inline-block;
+    top: 8%;
+    left: 80%;
+    width: 50px;
+    height: 27px;
+    border-radius: 60px;
+    background: #DDD;
+    transition: background 0.4s ease-in-out;
+
+    // White round switch
+    &::before {
+        content: '';
+        text-align: center;
+        vertical-align: middle;
+        position: absolute;
+        top: 2px;
+        left: 3px;
+        width: 22px;
+        height: 22px;
+        background: #FFF;
+        border-radius: 50%;
+        transition: left 0.4s ease-in-out;
+    }
+
+    // Units
+    &::after {
+        content: 'F°';
+        position: absolute;
+        top: 7px;
+        right: 7px;
+        font-size: $font-size-small;
+        color: #FFF;
+    }
+
+    &:checked {
+        background: $switch-color;
+
+        &::before {
+            left: 25px;
+        }
+
+        &::after {
+            content: 'C°';
+            left: 7px;
+        }
+    }
+}
+
+.current__forecast {
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%, -60%);
+    width: 60%;
+    background: rgba(0, 0, 0, 0.06);
+    border-radius: 3px;
+    text-align: center;
+    padding: 15px;
+
+    @include current-textstyle;
+
+    .current__summary {
+        font-size: $font-size-summary;
+        font-weight: $font-weight-summary;
+        padding: 0 0 10px;
+    }
+
+    .current__location {
+        font-size: $font-size-general;
+        font-weight: $font-weight-general;
+    }
+
+    .current__temp {
+        font-size: $font-size-temp;
+        font-weight: $font-weight-temp;
+        padding: 15px 0 0;
+
+        &::after {
+            content: '°';
+            padding: 0 0 0 8px;
+        }
+    }
+}
+
+/* ---------------------------------
+Next Temprature
+--------------------------------- */
+.next {
+    background: #FFF;
+    color: $next-color-primary;
+
+    ul {
+        padding: 30px;
+    }
+}
+
+.next__forecast {
+    display: flex;
+    align-items: center;
+
+    &:not(:last-child) {
+        padding: 0 0 25px;
+    }
+
+    .next__weekday {
+        @include flex-basis(4);
+
+        @include small-screen {
+            @include flex-basis(3);
+        }
+    }
+
+    .next__weatherIcon {
+        @include flex-basis(2);
+
+        img {
+            width: 25px;
+            height: 25px;
+        }
+    }
+
+    .next__maxTemp {
+        @include flex-basis(1);
+
+        color: $next-color-maxtemp;
+    }
+
+    .next__minTemp {
+        @include flex-basis(1);
+
+        color: $next-color-mintemp;
+    }
+}
+
+/* ---------------------------------
+Footer Temprature
+--------------------------------- */
+.footer__copyright {
+    color: $next-color-primary;
+    font-size: $font-size-small;
+
+    a {
+        @include link-style;
+    }
+}
